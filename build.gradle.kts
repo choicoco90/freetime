@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.example"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 
 java {
     toolchain {
@@ -29,9 +29,8 @@ dependencies {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "kotlin-jpa")
 
-    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.auth0:java-jwt:3.19.2")
+    implementation("com.auth0:java-jwt:4.4.0")
     implementation("com.mysql:mysql-connector-j")
 
     // kotlin

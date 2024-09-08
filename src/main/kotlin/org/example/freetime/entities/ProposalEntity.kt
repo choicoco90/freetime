@@ -11,7 +11,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.example.freetime.converter.SchedulesConverter
 import org.example.freetime.domain.Schedule
-import org.example.freetime.enum.ProposalStatus
+import org.example.freetime.enums.ProposalStatus
 import java.time.LocalDateTime
 
 @Entity
@@ -30,7 +30,11 @@ data class ProposalEntity(
     @Convert(converter = SchedulesConverter::class)
     val schedules: List<Schedule>,
 
+    @Column(name= "expiredAt", nullable = false)
     val expiredAt: LocalDateTime,
+
+    @Column(name= "description", nullable = false)
+    val description: String,
 
     @Column(name= "status", nullable = false)
     @Enumerated(EnumType.STRING)

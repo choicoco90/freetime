@@ -8,13 +8,13 @@ import java.time.LocalDateTime
 
 @Schema(description = "빈 시간 생성/수정 요청")
 data class FreeTimeRequest(
-    @Schema(description = "빈 시간 시작 시간 (시)")
+    @Schema(description = "빈 시간 시작 시간 (시)", example = "6", nullable = false)
     val startHour: Int,
-    @Schema(description = "빈 시간 시작 시간 (분)")
+    @Schema(description = "빈 시간 시작 시간 (분)", example = "30", nullable = false)
     val startMinute: Int,
-    @Schema(description = "빈 시간 종료 시간 (시)")
+    @Schema(description = "빈 시간 종료 시간 (시)", example = "9", nullable = false)
     val endHour: Int,
-    @Schema(description = "빈 시간 종료 시간 (분)")
+    @Schema(description = "빈 시간 종료 시간 (분)", example = "0", nullable = false)
     val endMinute: Int
 ){
     fun toDomain(): FreeTime {

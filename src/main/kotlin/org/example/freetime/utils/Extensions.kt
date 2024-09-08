@@ -10,13 +10,20 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
-import org.example.freetime.utils.Constants.DEFAULT_DATE_FORMAT
 import org.example.freetime.utils.Constants.DEFAULT_DATE_TIME_FORMAT
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import java.time.LocalDateTime
 import java.util.Locale
 import java.util.TimeZone
 
+inline fun <reified T> T.logger(): Logger {
+    if (T::class.isCompanion) {
+        return LoggerFactory.getLogger(T::class.java.enclosingClass)
+    }
+    return LoggerFactory.getLogger(T::class.java)
+}
 
 fun Any.toJsonNode(): JsonNode {
     return DEFAULT_MAPPER.valueToTree(this)

@@ -2,12 +2,14 @@ package org.example.freetime.entities
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.example.freetime.domain.Schedule
-import org.example.freetime.enum.MeetingStatus
+import org.example.freetime.enums.MeetingStatus
 import java.time.LocalDateTime
 
 @Entity
@@ -32,6 +34,7 @@ data class MeetingEntity(
     var description: String = "",
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     var status: MeetingStatus = MeetingStatus.ACCEPTED
 ){
     @Id

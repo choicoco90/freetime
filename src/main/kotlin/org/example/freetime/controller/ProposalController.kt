@@ -7,6 +7,7 @@ import org.example.freetime.dto.ProposalAcceptRequest
 import org.example.freetime.dto.ProposalCreateRequest
 import org.example.freetime.dto.ProposalResponse
 import org.example.freetime.service.MeetingService
+import org.example.freetime.utils.logger
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,24 +18,24 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/proposal")
+@RequestMapping("/proposals")
 @Tag(name = "미팅 제안 API")
 class ProposalController(
     val meetingService: MeetingService
 ) {
-    @GetMapping
-    @Operation(description = "나의 모든 제안 조회")
-    fun findAllProposal(
+    @GetMapping("/sent")
+    @Operation(summary = "내가 보낸 미팅 제안 조회")
+    fun findAllProposalSent(
         @RequestAttribute("userId") userId: Long
     ): List<ProposalResponse> {
-        return meetingService.findAllProposalsOfUser(userId).map {
+        return meetingService.findAllProposalsSent(userId).map {
             ProposalResponse.from(it)
         }
     }
 
     @GetMapping("/waiting")
-    @Operation(description = "나의 대기 중이며, 유효한 제안 조회")
-    fun findAllWaitingProposal(
+    @Operation(summary = "나의 대기 중이며, 유효한 미팅 제안 조회")
+    fun findAllProposalReceiveWaiting(
         @RequestAttribute("userId") userId: Long
     ): List<ProposalResponse> {
         return meetingService.findAllUnExpiredWaitingProposals(userId).map {
@@ -42,23 +43,27 @@ class ProposalController(
         }
     }
 
+    @Operation(summary = "미팅 제안 생성")
     @PostMapping
     fun createProposal(
         @RequestBody request: List<ProposalCreateRequest>,
         @RequestAttribute("userId") userId: Long
     ) {
+        logger().info("createProposal: $request")
         meetingService.registerProposal(userId, request)
     }
 
+    @Operation(summary = "미팅 제안 수락")
     @PutMapping("/{proposalId}/accept")
     fun acceptProposal(
         @RequestAttribute("userId") userId: Long,
         @PathVariable proposalId: Long,
         @RequestBody request: ProposalAcceptRequest
     ) {
-        meetingService.acceptProposal(userId, proposalId, request.schedule, request.description)
+        meetingService.acceptProposal(userId, proposalId, request.schedule.toDomain(), request.description)
     }
 
+    @Operation(summary = "미팅 제안 거절")
     @PutMapping("/{proposalId}/reject")
     fun rejectProposal(
         @PathVariable proposalId: Long

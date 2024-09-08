@@ -1,4 +1,4 @@
-package org.example.freetime.enum
+package org.example.freetime.enums
 
 enum class MeetingStatus(val description: String) {
     ACCEPTED("승인"),

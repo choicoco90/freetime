@@ -9,7 +9,10 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.example.freetime.dto.UserUpdateRequest
-import org.example.freetime.enum.NoticeChannel
+import org.example.freetime.enums.NoticeChannel
+import org.example.freetime.exception.BizException
+import org.example.freetime.exception.ErrorCode
+import java.util.UUID
 
 
 @Entity
@@ -18,7 +21,7 @@ data class UserEntity(
     @Column(name = "name", nullable = false)
     var name: String,
     @Column(name = "email", nullable = false)
-    val email: String,
+    var email: String,
     @Column(name = "password", nullable = false)
     var password: String,
     @Column(name = "phone", nullable = true)
@@ -34,10 +37,20 @@ data class UserEntity(
     fun updateUserInfo(request: UserUpdateRequest){
         this.name = request.name
         this.phone = request.phone
+        if(request.preferredNoticeChannel == NoticeChannel.SMS && this.phone == null){
+            throw BizException(ErrorCode.CANNOT_USE_SMS)
+        }
         this.preferredNoticeChannel = request.preferredNoticeChannel
     }
 
     fun resetPassword(newPassword: String){
         this.password = newPassword
+    }
+
+    fun deleteUserInfo(){
+        this.email = UUID.randomUUID().toString() + "@deleted.com"
+        this.name = "탈퇴한 사용자"
+        this.phone = "00000000000"
+        this.preferredNoticeChannel = NoticeChannel.EMAIL
     }
 }

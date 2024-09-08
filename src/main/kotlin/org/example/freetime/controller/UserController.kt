@@ -11,8 +11,10 @@ import org.example.freetime.dto.UserResetPasswordResponse
 import org.example.freetime.dto.UserResponse
 import org.example.freetime.dto.UserUpdateRequest
 import org.example.freetime.service.UserService
+import org.example.freetime.utils.logger
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestAttribute
@@ -22,12 +24,19 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @Tag(name = "사용자 관리 API")
 class UserController(
     val userService: UserService
 ) {
-    @Operation(description = "사용자 등록")
+    @Operation(summary = "사용자 목록 조회")
+    @GetMapping("/all")
+    fun getAllUsers(): List<UserResponse> {
+        logger().info("Get all users")
+        return userService.getAllUsers().map { UserResponse.from(it) }
+    }
+
+    @Operation(summary = "사용자 등록")
     @PostMapping("/auth/register")
     fun register(
         @RequestBody request: UserCreateRequest
@@ -36,7 +45,7 @@ class UserController(
         return TokenResponse.from(token)
     }
 
-    @Operation(description = "사용자 로그인")
+    @Operation(summary = "사용자 로그인")
     @PostMapping("/auth/login")
     fun login(
         @RequestBody request: UserLoginRequest
@@ -45,7 +54,7 @@ class UserController(
         return TokenResponse.from(token)
     }
 
-    @Operation(description = "비밀번호 찾기 문자열 생성 (암호화 키)")
+    @Operation(summary = "비밀번호 찾기 문자열 생성 (암호화 키)")
     @PostMapping("/auth/password/reset")
     fun resetPasswordString(
         @RequestBody request: UserResetPasswordRequest
@@ -53,7 +62,7 @@ class UserController(
         return userService.resetPasswordConfirmSecret(request)
     }
 
-    @Operation(description = "비밀번호 찾기 문자열 확인 및 비밀번호 재설정")
+    @Operation(summary = "비밀번호 찾기 문자열 확인 및 비밀번호 재설정")
     @GetMapping("/auth/password/confirm")
     fun confirmAndResetPassword(
         @Schema(description = "암호화 키")
@@ -62,7 +71,7 @@ class UserController(
         userService.confirmAndResetPassword(secret)
     }
 
-    @Operation(description = "사용자 정보 수정")
+    @Operation(summary = "사용자 정보 수정")
     @PutMapping("/update")
     fun update(
         @RequestAttribute userId: Long,
@@ -71,7 +80,7 @@ class UserController(
         userService.updateUser(userId, request)
     }
 
-    @Operation(description = "토큰 갱신")
+    @Operation(summary = "토큰 갱신")
     @PostMapping("/refresh")
     fun refresh(
         @RequestAttribute userId: Long
@@ -80,7 +89,7 @@ class UserController(
         return TokenResponse.from(userService.createToken(user.id))
     }
 
-    @Operation(description = "사용자 삭제")
+    @Operation(summary = "사용자 삭제")
     @DeleteMapping("/delete")
     fun delete(
         @RequestAttribute userId: Long
@@ -88,7 +97,7 @@ class UserController(
         userService.deleteUserById(userId)
     }
 
-    @Operation(description = "사용자 조회")
+    @Operation(summary = "사용자 조회")
     @GetMapping
     fun getUser(
         @RequestAttribute userId: Long

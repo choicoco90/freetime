@@ -2,7 +2,7 @@ package org.example.freetime.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.example.freetime.entities.MeetingEntity
-import org.example.freetime.enum.MeetingStatus
+import org.example.freetime.enums.MeetingStatus
 import java.time.LocalDateTime
 
 @Schema(description = "미팅 응답")

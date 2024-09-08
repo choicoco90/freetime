@@ -6,7 +6,9 @@ import org.example.freetime.domain.Schedules
 import org.example.freetime.entities.DailyFreeTimeEntity
 import org.example.freetime.entities.MeetingEntity
 import org.example.freetime.entities.WeeklyFreeTimeEntity
-import org.example.freetime.enum.MeetingStatus
+import org.example.freetime.enums.MeetingStatus
+import org.example.freetime.exception.BizException
+import org.example.freetime.exception.ErrorCode
 import org.example.freetime.repository.DailyFreeTimeRepository
 import org.example.freetime.repository.MeetingRepository
 import org.example.freetime.repository.WeeklyFreeTimeRepository
@@ -22,7 +24,7 @@ class FreeTimeService(
 ) {
     @Transactional(readOnly = false)
     fun getSchedules(userId: Long, start: LocalDate, end: LocalDate): Map<LocalDate, Schedules> {
-        val weeklyFreeTime = weeklyFreeTimeRepository.findByUserId(userId) ?: throw RuntimeException("Weekly free times not found")
+        val weeklyFreeTime = weeklyFreeTimeRepository.findByUserId(userId) ?: throw BizException(ErrorCode.WEEKLY_FREE_TIME_NOT_FOUND)
         val dailyFreeTimes = dailyFreeTimeRepository.findAllByUserIdAndDateBetween(userId, start, end)
         val meetings = meetingRepository.findAllByUserIdAndStartBetweenAndStatus(userId, start.atStartOfDay(), end.atStartOfDay(), MeetingStatus.ACCEPTED)
         val dates = start.datesUntil(end).toList()
@@ -40,14 +42,10 @@ class FreeTimeService(
         val meetings = meetingEntities.filter { it.start.toLocalDate() == date }.map { it.toSchedule() }
         return Schedules.of(freeTime = daily ?: weekly, meetings = meetings)
     }
-    @Transactional(readOnly = false)
-    fun createWeeklyFreeTimes(userId: Long, command: FreeTimeWeeklyUpdateCommand) {
-        val weeklyFreeTime = command.toEntity(userId)
-        weeklyFreeTimeRepository.save(weeklyFreeTime)
-    }
+
     @Transactional(readOnly = false)
     fun updateWeeklyFreeTimes(userId: Long, command: FreeTimeWeeklyUpdateCommand) {
-        val weeklyFreeTime = weeklyFreeTimeRepository.findByUserId(userId) ?: throw RuntimeException("Weekly free times not found")
+        val weeklyFreeTime = weeklyFreeTimeRepository.findByUserId(userId) ?: throw BizException(ErrorCode.WEEKLY_FREE_TIME_NOT_FOUND)
         weeklyFreeTime.update(command)
         weeklyFreeTimeRepository.save(weeklyFreeTime)
     }

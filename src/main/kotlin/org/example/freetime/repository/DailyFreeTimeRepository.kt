@@ -9,4 +9,6 @@ interface DailyFreeTimeRepository: JpaRepository<DailyFreeTimeEntity,Long> {
     fun findByUserIdAndDate(userId: Long, date: LocalDate): DailyFreeTimeEntity?
 
     fun findAllByUserIdAndDateBetween(userId: Long, start: LocalDate, end: LocalDate): List<DailyFreeTimeEntity>
+
+    fun deleteByUserId(userId: Long)
 }

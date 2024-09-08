@@ -54,7 +54,7 @@ data class WeeklyFreeTimeEntity(
             DayOfWeek.FRIDAY -> friday
             DayOfWeek.SATURDAY -> saturday
             DayOfWeek.SUNDAY -> sunday
-            else -> throw RuntimeException("Invalid day")
+            else -> throw IllegalArgumentException("Invalid day of week")
         }
     }
     fun update(command: FreeTimeWeeklyUpdateCommand){

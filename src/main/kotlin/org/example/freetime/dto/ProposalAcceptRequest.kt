@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Schema(description = "제안 수락")
 data class ProposalAcceptRequest(
     @Schema(description = "수락한 일정")
-    val schedule: Schedule,
+    val schedule: ScheduleRequest,
     @Schema(description = "미팅 설명 추가 (default 빈 문자열)")
     val description: String
 )

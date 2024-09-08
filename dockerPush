@@ -1,0 +1,9 @@
+./gradlew clean &&
+echo "Build clean" &&
+
+SPRING_PROFILES_ACTIVE=prod ./gradlew clean build --no-build-cache &&
+SPRING_PROFILES_ACTIVE=prod ./gradlew build -x test &&
+echo "prod Build finished" &&
+
+docker build --no-cache --build-arg DEPENDENCY=build/dependency -t jeekimdev/test --platform linux/amd64 -f ./Dockerfile . &&
+docker push jeekimdev/test

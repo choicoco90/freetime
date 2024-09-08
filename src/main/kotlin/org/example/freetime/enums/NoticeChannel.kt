@@ -1,4 +1,4 @@
-package org.example.freetime.enum
+package org.example.freetime.enums
 
 enum class NoticeChannel {
     EMAIL,
