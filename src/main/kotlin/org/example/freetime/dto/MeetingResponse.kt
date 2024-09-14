@@ -9,6 +9,8 @@ import java.time.LocalDateTime
 data class MeetingResponse(
     @Schema(description = "미팅 ID")
     val meetingId: Long,
+    @Schema(description = "요청 수신자 ID")
+    val receiverId: Long,
     @Schema(description = "요청자 ID")
     val requesterId: Long,
     @Schema(description = "요청자 이름")
@@ -24,7 +26,7 @@ data class MeetingResponse(
 ){
     companion object{
         fun from(meetings: List<MeetingEntity>): List<MeetingResponse> {
-            return meetings.map { MeetingResponse(it.id, it.requesterId, it.requesterName, it.start, it.end, it.description, it.status) }
+            return meetings.map { MeetingResponse(it.id,it.userId, it.requesterId, it.requesterName, it.start, it.end, it.description, it.status) }
         }
     }
 }
