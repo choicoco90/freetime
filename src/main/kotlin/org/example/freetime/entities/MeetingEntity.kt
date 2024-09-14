@@ -10,11 +10,16 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.example.freetime.domain.Schedule
 import org.example.freetime.enums.MeetingStatus
+import org.example.freetime.exception.BizException
+import org.example.freetime.exception.ErrorCode
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "meetings")
 data class MeetingEntity(
+    /**
+     * 미팅의 주인 (개인 미팅의 경우 미팅 요청을 받은 사람, 그룹 미팅의 경우 그룹의 주인)
+     */
     @Column(name= "userId", nullable = false)
     val userId: Long,
 
@@ -61,4 +66,10 @@ data class MeetingEntity(
             end = end
         )
     }
+
+    fun validateUpdate(userId: Long) {
+        val updatePossibleIds = listOf(requesterId, userId)
+        if(userId !in updatePossibleIds) throw BizException(ErrorCode.MEETING_IS_NOT_MINE)
+    }
+
 }

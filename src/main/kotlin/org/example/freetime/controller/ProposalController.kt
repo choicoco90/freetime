@@ -66,9 +66,10 @@ class ProposalController(
     @Operation(summary = "미팅 제안 거절")
     @PutMapping("/{proposalId}/reject")
     fun rejectProposal(
+        @RequestAttribute("userId") userId: Long,
         @PathVariable proposalId: Long
     ) {
-        meetingService.rejectProposal(proposalId)
+        meetingService.rejectProposal(userId, proposalId)
     }
 
 }

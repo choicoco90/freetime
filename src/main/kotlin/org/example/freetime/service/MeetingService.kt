@@ -12,7 +12,6 @@ import org.example.freetime.exception.ErrorCode
 import org.example.freetime.repository.MeetingRepository
 import org.example.freetime.repository.ProposalRepository
 import org.example.freetime.repository.UserRepository
-import org.example.freetime.utils.logger
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -42,9 +41,9 @@ class MeetingService(
     @Transactional(readOnly = false)
     fun acceptProposal(userId: Long, proposalId: Long, schedule: Schedule, description: String) {
         val proposal = proposalRepository.findById(proposalId).orElseThrow { throw BizException(ErrorCode.PROPOSAL_NOT_FOUND) }
-        if(proposal.userId != userId) throw BizException(ErrorCode.PROPOSAL_IS_NOT_MINE)
-        if(proposal.status != ProposalStatus.WAITING) throw BizException(ErrorCode.PROPOSAL_NOT_WAITING)
-        if(proposal.expiredAt.isBefore(LocalDateTime.now())) throw BizException(ErrorCode.PROPOSAL_EXPIRED)
+        if (proposal.userId != userId) throw BizException(ErrorCode.PROPOSAL_IS_NOT_MINE)
+        if (proposal.status != ProposalStatus.WAITING) throw BizException(ErrorCode.PROPOSAL_NOT_WAITING)
+        if (proposal.expiredAt.isBefore(LocalDateTime.now())) throw BizException(ErrorCode.PROPOSAL_EXPIRED)
         val foundSchedule = proposal.schedules.find { it == schedule } ?: throw BizException(ErrorCode.PROPOSAL_SCHEDULE_NOT_FOUND)
         val meeting = MeetingEntity(
             userId = userId,
@@ -61,8 +60,10 @@ class MeetingService(
 
 
     @Transactional(readOnly = false)
-    fun rejectProposal(proposalId: Long) {
+    fun rejectProposal(userId: Long, proposalId: Long) {
         val proposal = proposalRepository.findById(proposalId).orElseThrow { throw BizException(ErrorCode.PROPOSAL_NOT_FOUND) }
+        if(proposal.userId != userId) throw BizException(ErrorCode.PROPOSAL_IS_NOT_MINE)
+        if(proposal.status != ProposalStatus.WAITING) throw BizException(ErrorCode.PROPOSAL_NOT_WAITING)
         proposal.reject()
         proposalRepository.save(proposal)
     }
@@ -82,22 +83,30 @@ class MeetingService(
         return meetingRepository.findAllByUserIdAndStartBetween(userId, from.atStartOfDay(), to.atStartOfDay())
     }
     @Transactional(readOnly = false)
-    fun updateMeetingStatus(meetingId: Long, status: MeetingStatus, userId: Long) {
+    fun acceptMeeting(meetingId: Long, userId: Long) {
         val meeting = meetingRepository.findById(meetingId).orElseThrow { throw BizException(ErrorCode.MEETING_NOT_FOUND) }
+        meeting.validateUpdate(userId)
         if(meeting.userId != userId) throw BizException(ErrorCode.MEETING_IS_NOT_MINE)
-        if(meeting.status == status) throw BizException(ErrorCode.MEETING_STATUS_IS_SAME)
-        meeting.updateStatus(status)
+        meeting.updateStatus(MeetingStatus.ACCEPTED)
         meetingRepository.save(meeting)
     }
+
+    @Transactional(readOnly = false)
+    fun cancelMeeting(meetingId: Long, userId: Long) {
+        val meeting = meetingRepository.findById(meetingId).orElseThrow { throw BizException(ErrorCode.MEETING_NOT_FOUND) }
+        meeting.validateUpdate(userId)
+        meeting.updateStatus(MeetingStatus.ACCEPTED)
+        meetingRepository.save(meeting)
+    }
+
     @Transactional(readOnly = false)
     fun updateMeeting(meetingId: Long, request: MeetingUpdateRequest, userId: Long) {
         val meeting = meetingRepository.findById(meetingId).orElseThrow { throw BizException(ErrorCode.MEETING_NOT_FOUND) }
-        if(meeting.userId != userId) throw BizException(ErrorCode.MEETING_IS_NOT_MINE)
+        meeting.validateUpdate(userId)
         val hasChange = meeting.hasChanged(request.start, request.end, request.description)
         if (hasChange){
             meeting.update(request.start, request.end, request.description)
             meetingRepository.save(meeting)
-            // TODO: 이메일 보내는 기능 추가
         }
     }
 }

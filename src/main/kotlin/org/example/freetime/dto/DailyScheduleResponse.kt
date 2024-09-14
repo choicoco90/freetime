@@ -10,10 +10,10 @@ data class DailyScheduleResponse(
     val date: LocalDate,
     @Schema(description = "요일")
     val day: String,
-    @Schema(description = "빈 시간")
+    @Schema(description = "빈 시간(미팅 시간 제외됨)")
     val freeTime: List<ScheduleResponse>,
     @Schema(description = "미팅 시간 (빈 시간 보다 상위 노출)")
-    val meetings: List<ScheduleResponse>
+    val confirmedMeetings: List<ScheduleResponse>
 ){
     companion object{
         fun from(date: LocalDate, schedules: Schedules): DailyScheduleResponse {
@@ -21,7 +21,7 @@ data class DailyScheduleResponse(
                 date = date,
                 day = date.dayOfWeek.toString(),
                 freeTime = ScheduleResponse.from(schedules.freeTime),
-                meetings = ScheduleResponse.from(schedules.meetings)
+                confirmedMeetings = ScheduleResponse.from(schedules.confirmedMeetings)
             )
         }
     }

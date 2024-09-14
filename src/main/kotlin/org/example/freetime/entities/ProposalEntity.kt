@@ -17,9 +17,14 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "proposal")
 data class ProposalEntity(
+    /**
+     * 요청을 받은 사람의 아이디(선택 권자)
+     */
     @Column(name= "userId", nullable = false)
     val userId: Long,
-
+    /**
+     * 요청을 보낸 사람의 아이디
+     */
     @Column(name= "requesterId", nullable = false)
     val requesterId: Long,
 

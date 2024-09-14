@@ -1,12 +1,15 @@
 package org.example.freetime.domain
 
+import org.example.freetime.utils.FreeTimeUtils
+
 data class Schedules(
     val freeTime: List<Schedule>,
-    val meetings: List<Schedule>
+    val confirmedMeetings: List<Schedule>
 ){
     companion object{
-        fun of(freeTime: List<Schedule>, meetings: List<Schedule>): Schedules {
-            return Schedules(freeTime, meetings)
+        fun of(freeTime: List<Schedule>, confirmedMeetings: List<Schedule>): Schedules {
+            val excludedFreeTimes = FreeTimeUtils.excludeOverlap(freeTime, confirmedMeetings)
+            return Schedules(excludedFreeTimes, confirmedMeetings)
         }
     }
 }

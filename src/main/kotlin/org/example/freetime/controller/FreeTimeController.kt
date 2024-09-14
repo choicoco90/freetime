@@ -7,7 +7,6 @@ import org.example.freetime.dto.FreeTimeMyResponse
 import org.example.freetime.dto.FreeTimeDailyRequest
 import org.example.freetime.dto.FreeTimeWeeklyRequest
 import org.example.freetime.service.FreeTimeService
-import org.example.freetime.service.MeetingService
 import org.example.freetime.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,8 +23,7 @@ import java.time.LocalDate
 @Tag(name = "빈 시간 관련 API")
 class FreeTimeController(
     val freeTimeService: FreeTimeService,
-    val userService: UserService,
-    val meetingService: MeetingService
+    val userService: UserService
 ) {
     @Operation(summary = "나의 빈 시간 조회 (메인 API)")
     @GetMapping
@@ -35,21 +33,20 @@ class FreeTimeController(
         @RequestParam end: LocalDate
     ): FreeTimeMyResponse {
         val user = userService.getUserById(userId)
-        val meetings = meetingService.findAllMeetingsOfPeriod(userId, start, end.plusDays(1))
-        val schedules = freeTimeService.getSchedules(userId, start, end.plusDays(1))
-        return FreeTimeMyResponse.from(user, schedules, meetings)
+        val weeklyScheduleInfo = freeTimeService.getSchedules(userId, start, end.plusDays(1))
+        return FreeTimeMyResponse.from(user, weeklyScheduleInfo)
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{targetId}")
     @Operation(summary = "게스트 빈 시간 조회 (ReadOnly, 미팅 정보 미포함)")
     fun getFreeTimeReadOnly(
-        @PathVariable userId: Long,
+        @PathVariable targetId: Long,
         @RequestParam start: LocalDate,
         @RequestParam end: LocalDate
     ): FreeTimeGuestResponse {
-        val user = userService.getUserById(userId)
-        val schedules = freeTimeService.getSchedules(userId, start, end)
-        return FreeTimeGuestResponse.from(user, schedules)
+        val target = userService.getUserById(targetId)
+        val schedules = freeTimeService.getSchedules(targetId, start, end)
+        return FreeTimeGuestResponse.from(target, schedules)
     }
 
     @PutMapping("/update/weekly")

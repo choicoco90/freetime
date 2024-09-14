@@ -31,7 +31,7 @@ class MeetingController(
         @RequestAttribute("userId") userId: Long,
         @PathVariable meetingId: Long
     ) {
-        meetingService.updateMeetingStatus(meetingId, MeetingStatus.CANCELED, userId)
+        meetingService.cancelMeeting(meetingId, userId)
     }
 
     @Operation(summary = "미팅 상태 수정(승인)")
@@ -40,7 +40,7 @@ class MeetingController(
         @RequestAttribute("userId") userId: Long,
         @PathVariable meetingId: Long
     ) {
-        meetingService.updateMeetingStatus(meetingId, MeetingStatus.ACCEPTED, userId)
+        meetingService.acceptMeeting(meetingId, userId)
     }
 
     @Operation(summary = "미팅 정보 수정")

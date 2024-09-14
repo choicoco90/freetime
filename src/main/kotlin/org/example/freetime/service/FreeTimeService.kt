@@ -3,6 +3,8 @@ package org.example.freetime.service
 import org.example.freetime.domain.FreeTimeDailyUpdateCommand
 import org.example.freetime.domain.FreeTimeWeeklyUpdateCommand
 import org.example.freetime.domain.Schedules
+import org.example.freetime.dto.MeetingResponse
+import org.example.freetime.dto.WeeklyScheduleInfoResponse
 import org.example.freetime.entities.DailyFreeTimeEntity
 import org.example.freetime.entities.MeetingEntity
 import org.example.freetime.entities.WeeklyFreeTimeEntity
@@ -23,24 +25,32 @@ class FreeTimeService(
     val meetingRepository: MeetingRepository
 ) {
     @Transactional(readOnly = false)
-    fun getSchedules(userId: Long, start: LocalDate, end: LocalDate): Map<LocalDate, Schedules> {
+    fun getSchedules(userId: Long, start: LocalDate, end: LocalDate): WeeklyScheduleInfoResponse {
         val weeklyFreeTime = weeklyFreeTimeRepository.findByUserId(userId) ?: throw BizException(ErrorCode.WEEKLY_FREE_TIME_NOT_FOUND)
         val dailyFreeTimes = dailyFreeTimeRepository.findAllByUserIdAndDateBetween(userId, start, end)
-        val meetings = meetingRepository.findAllByUserIdAndStartBetweenAndStatus(userId, start.atStartOfDay(), end.atStartOfDay(), MeetingStatus.ACCEPTED)
+        val ownedMeetings = meetingRepository.findAllByUserIdAndStartBetween(userId, start.atStartOfDay(), end.atStartOfDay())
+        val guestMeetings = meetingRepository.findAllByRequesterIdAndStartBetween(userId, start.atStartOfDay(), end.atStartOfDay())
         val dates = start.datesUntil(end).toList()
-        return dates.associateWith { getScheduleOfDate(it, weeklyFreeTime, dailyFreeTimes, meetings) }
+        val schedules= dates.associateWith { getScheduleOfDate(it, weeklyFreeTime, dailyFreeTimes, ownedMeetings, guestMeetings) }
+        return WeeklyScheduleInfoResponse(
+            schedules = schedules,
+            ownedMeetings = MeetingResponse.from(ownedMeetings),
+            guestMeetings = MeetingResponse.from(guestMeetings)
+        )
     }
 
     private fun getScheduleOfDate(
         date: LocalDate,
         weeklyFreeTime: WeeklyFreeTimeEntity,
         dailyFreeTimes: List<DailyFreeTimeEntity>,
-        meetingEntities: List<MeetingEntity>
+        ownedMeetings: List<MeetingEntity>,
+        guestMeetings: List<MeetingEntity>
     ): Schedules {
         val weekly = weeklyFreeTime.getFreeTime(date.dayOfWeek).map { it.toSchedule(date) }
         val daily = dailyFreeTimes.find { it.date == date }?.freeTime?.map { it.toSchedule(date) }
-        val meetings = meetingEntities.filter { it.start.toLocalDate() == date }.map { it.toSchedule() }
-        return Schedules.of(freeTime = daily ?: weekly, meetings = meetings)
+        val meetingEntities = ownedMeetings + guestMeetings
+        val acceptedMeetings = meetingEntities.filter { it.start.toLocalDate() == date && it.status == MeetingStatus.ACCEPTED }.map { it.toSchedule() }
+        return Schedules.of(freeTime = daily ?: weekly, confirmedMeetings = acceptedMeetings)
     }
 
     @Transactional(readOnly = false)
