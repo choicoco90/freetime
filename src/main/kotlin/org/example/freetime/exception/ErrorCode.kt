@@ -46,6 +46,15 @@ enum class ErrorCode(
     DAILY_FREE_TIME_NOT_FOUND("50001", HttpStatus.NOT_FOUND, "[빈 시간] 일일 빈 시간을 찾을 수 없음"),
 
     /**
+     * 그룹 서비스 에러코드
+     */
+    GROUP_NOT_FOUND("60000", HttpStatus.NOT_FOUND, "[그룹] 그룹을 찾을 수 없음"),
+    NOT_GROUP_LEADER("60001", HttpStatus.BAD_REQUEST, "[그룹] 그룹 리더가 아님"),
+    CANNOT_DELETE_GROUP_LEADER("60002", HttpStatus.BAD_REQUEST, "[그룹] 그룹 리더는 삭제할 수 없음"),
+    ALREADY_GROUP_MEMBER("60003", HttpStatus.BAD_REQUEST, "[그룹] 이미 그룹 멤버임"),
+    NOT_GROUP_MEMBER("60004", HttpStatus.BAD_REQUEST, "[그룹] 그룹 멤버가 아님"),
+
+    /**
      * 기타 에러 (80000 ~ 89999)
      */
 
