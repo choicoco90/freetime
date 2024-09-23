@@ -6,6 +6,7 @@ import org.example.freetime.dto.FreeTimeGuestResponse
 import org.example.freetime.dto.FreeTimeMyResponse
 import org.example.freetime.dto.FreeTimeDailyRequest
 import org.example.freetime.dto.FreeTimeWeeklyRequest
+import org.example.freetime.dto.FreeTimeWeeklyResponse
 import org.example.freetime.service.FreeTimeService
 import org.example.freetime.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,6 +26,36 @@ class FreeTimeController(
     val freeTimeService: FreeTimeService,
     val userService: UserService
 ) {
+
+    @Operation(summary = "나의 설정된 주간 빈시간 조회")
+    @GetMapping("/weekly")
+    fun getMyWeeklyFreeTime(
+        @RequestAttribute userId: Long,
+    ): FreeTimeWeeklyResponse {
+        val weeklyFreeTimeEntity = freeTimeService.getWeeklyFreeTimes(userId)
+        return FreeTimeWeeklyResponse.of(weeklyFreeTimeEntity)
+    }
+
+    @PutMapping("/weekly")
+    @Operation(summary = "주간 빈 시간 수정")
+    fun updateWeeklyFreeTime(
+        @RequestAttribute userId: Long,
+        @RequestBody request: FreeTimeWeeklyRequest
+    ) {
+        val command = request.toCommand()
+        freeTimeService.updateWeeklyFreeTimes(userId, command)
+    }
+
+    @PutMapping("/daily")
+    @Operation(summary = "일간 빈 시간 수정 및 추가")
+    fun updateDailyFreeTime(
+        @RequestAttribute userId: Long,
+        @RequestBody request: FreeTimeDailyRequest
+    ) {
+        val command = request.toCommand()
+        freeTimeService.updateDailyFreeTimes(userId, command)
+    }
+
     @Operation(summary = "나의 빈 시간 조회 (메인 API)")
     @GetMapping
     fun getMyFreeTime(
@@ -47,26 +78,6 @@ class FreeTimeController(
         val target = userService.getUserById(targetId)
         val schedules = freeTimeService.getSchedules(targetId, start, end)
         return FreeTimeGuestResponse.from(target, schedules)
-    }
-
-    @PutMapping("/update/weekly")
-    @Operation(summary = "주간 빈 시간 수정")
-    fun updateWeekly(
-        @RequestAttribute userId: Long,
-        @RequestBody request: FreeTimeWeeklyRequest
-    ) {
-        val command = request.toCommand()
-        freeTimeService.updateWeeklyFreeTimes(userId, command)
-    }
-
-    @PutMapping("/update/daily")
-    @Operation(summary = "일간 빈 시간 수정 및 추가")
-    fun updateDaily(
-        @RequestAttribute userId: Long,
-        @RequestBody request: FreeTimeDailyRequest
-    ) {
-        val command = request.toCommand()
-        freeTimeService.updateDailyFreeTimes(userId, command)
     }
 
 }

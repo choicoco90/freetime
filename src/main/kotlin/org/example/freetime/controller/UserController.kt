@@ -29,6 +29,14 @@ import org.springframework.web.bind.annotation.RestController
 class UserController(
     val userService: UserService
 ) {
+    @Operation(summary = "사용자 조회")
+    @GetMapping
+    fun getUser(
+        @RequestAttribute userId: Long
+    ): UserResponse {
+        return UserResponse.from(userService.getUserById(userId))
+    }
+
     @Operation(summary = "사용자 목록 조회")
     @GetMapping("/all")
     fun getAllUsers(): List<UserResponse> {
@@ -95,13 +103,5 @@ class UserController(
         @RequestAttribute userId: Long
     ) {
         userService.deleteUserById(userId)
-    }
-
-    @Operation(summary = "사용자 조회")
-    @GetMapping
-    fun getUser(
-        @RequestAttribute userId: Long
-    ): UserResponse {
-        return UserResponse.from(userService.getUserById(userId))
     }
 }

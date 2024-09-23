@@ -24,6 +24,19 @@ class FreeTimeService(
     val dailyFreeTimeRepository: DailyFreeTimeRepository,
     val meetingRepository: MeetingRepository
 ) {
+    @Transactional(readOnly = true)
+    fun getWeeklyFreeTimes(userId: Long): WeeklyFreeTimeEntity {
+        return weeklyFreeTimeRepository.findByUserId(userId) ?: throw BizException(ErrorCode.WEEKLY_FREE_TIME_NOT_FOUND)
+    }
+
+    @Transactional(readOnly = false)
+    fun updateWeeklyFreeTimes(userId: Long, command: FreeTimeWeeklyUpdateCommand) {
+        val weeklyFreeTime = weeklyFreeTimeRepository.findByUserId(userId) ?: throw BizException(ErrorCode.WEEKLY_FREE_TIME_NOT_FOUND)
+        weeklyFreeTime.update(command)
+        weeklyFreeTimeRepository.save(weeklyFreeTime)
+    }
+
+
     @Transactional(readOnly = false)
     fun getSchedules(userId: Long, start: LocalDate, end: LocalDate): WeeklyScheduleInfoResponse {
         val weeklyFreeTime = weeklyFreeTimeRepository.findByUserId(userId) ?: throw BizException(ErrorCode.WEEKLY_FREE_TIME_NOT_FOUND)
@@ -53,12 +66,7 @@ class FreeTimeService(
         return Schedules.of(freeTime = daily ?: weekly, confirmedMeetings = acceptedMeetings)
     }
 
-    @Transactional(readOnly = false)
-    fun updateWeeklyFreeTimes(userId: Long, command: FreeTimeWeeklyUpdateCommand) {
-        val weeklyFreeTime = weeklyFreeTimeRepository.findByUserId(userId) ?: throw BizException(ErrorCode.WEEKLY_FREE_TIME_NOT_FOUND)
-        weeklyFreeTime.update(command)
-        weeklyFreeTimeRepository.save(weeklyFreeTime)
-    }
+
     @Transactional(readOnly = false)
     fun updateDailyFreeTimes(userId: Long, command: FreeTimeDailyUpdateCommand) {
         val saved = dailyFreeTimeRepository.findByUserIdAndDate(userId, command.date)

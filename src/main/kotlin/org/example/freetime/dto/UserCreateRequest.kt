@@ -16,9 +16,7 @@ data class UserCreateRequest(
     @Schema(description = "사용자 핸드폰", example = "01011111111", nullable = true)
     val phone: String?,
     @Schema(description = "사용자 알림 채널", example = "EMAIL", nullable = false)
-    val preferredNoticeChannel: NoticeChannel,
-    @Schema(description = "주간 빈 시간 설정", nullable = false)
-    val weeklyFreeTime: FreeTimeWeeklyRequest
+    val preferredNoticeChannel: NoticeChannel
 ){
     fun validate(){
         if(phone == null && preferredNoticeChannel == NoticeChannel.SMS){

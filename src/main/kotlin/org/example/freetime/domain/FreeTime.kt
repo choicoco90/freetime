@@ -14,4 +14,14 @@ data class FreeTime(
             end = date.atTime(endHour, endMinute)
         )
     }
+    companion object {
+        fun default(): FreeTime {
+            return FreeTime(
+                startHour = 18,
+                startMinute = 30,
+                endHour = 21,
+                endMinute = 0
+            )
+        }
+    }
 }

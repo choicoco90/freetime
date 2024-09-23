@@ -12,12 +12,11 @@ import org.example.freetime.dto.UserResetPasswordRequest
 import org.example.freetime.dto.UserResetPasswordResponse
 import org.example.freetime.dto.UserUpdateRequest
 import org.example.freetime.entities.UserEntity
+import org.example.freetime.entities.WeeklyFreeTimeEntity
 import org.example.freetime.exception.AuthException
 import org.example.freetime.exception.BizException
 import org.example.freetime.exception.ErrorCode
 import org.example.freetime.repository.DailyFreeTimeRepository
-import org.example.freetime.repository.MeetingRepository
-import org.example.freetime.repository.ProposalRepository
 import org.example.freetime.repository.UserRepository
 import org.example.freetime.repository.WeeklyFreeTimeRepository
 import org.example.freetime.utils.Constants.BEARER
@@ -70,8 +69,7 @@ class UserService(
             phone = request.phone
         )
         val saved = userRepository.save(user)
-        val command = request.weeklyFreeTime.toCommand()
-        val weeklyFreeTime = command.toEntity(saved.id)
+        val weeklyFreeTime = WeeklyFreeTimeEntity.default(saved.id)
         weeklyFreeTimeRepository.save(weeklyFreeTime)
         return createToken(saved.id)
     }

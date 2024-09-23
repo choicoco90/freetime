@@ -45,6 +45,20 @@ data class WeeklyFreeTimeEntity(
     @Convert(converter = FreeTimeConverter::class)
     var sunday: List<FreeTime>
 ){
+    companion object{
+        fun default(userId: Long): WeeklyFreeTimeEntity {
+            return WeeklyFreeTimeEntity(
+                userId = userId,
+                monday = listOf(FreeTime.default()),
+                tuesday = listOf(FreeTime.default()),
+                wednesday = listOf(FreeTime.default()),
+                thursday = listOf(FreeTime.default()),
+                friday = listOf(FreeTime.default()),
+                saturday = listOf(FreeTime.default()),
+                sunday = listOf(FreeTime.default())
+            )
+        }
+    }
     fun getFreeTime(day: DayOfWeek): List<FreeTime> {
         return when(day){
             DayOfWeek.MONDAY -> monday
