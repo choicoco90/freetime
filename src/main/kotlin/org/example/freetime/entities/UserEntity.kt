@@ -8,7 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import org.example.freetime.dto.UserUpdateRequest
+import org.example.freetime.dto.request.UserUpdateRequest
 import org.example.freetime.enums.NoticeChannel
 import org.example.freetime.exception.BizException
 import org.example.freetime.exception.ErrorCode

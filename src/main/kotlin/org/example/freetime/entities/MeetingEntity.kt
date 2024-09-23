@@ -35,6 +35,9 @@ data class MeetingEntity(
     @Column(name = "end", nullable = false)
     var end: LocalDateTime,
 
+    @Column(name = "place", nullable = false)
+    var place: String,
+
     @Column(name = "description", nullable = false)
     var description: String = "",
 
@@ -50,14 +53,15 @@ data class MeetingEntity(
         this.status = status
     }
 
-    fun update(start: LocalDateTime, end: LocalDateTime, description: String){
+    fun update(start: LocalDateTime, end: LocalDateTime, description: String, place: String) {
         this.start = start
         this.end = end
         this.description = description
+        this.place = place
     }
 
-    fun hasChanged(start: LocalDateTime, end: LocalDateTime, description: String): Boolean {
-        return this.start != start || this.end != end || this.description != description
+    fun hasChanged(start: LocalDateTime, end: LocalDateTime, description: String, place: String): Boolean {
+        return this.start != start || this.end != end || this.description != description || this.place != place
     }
 
     fun toSchedule(): Schedule {

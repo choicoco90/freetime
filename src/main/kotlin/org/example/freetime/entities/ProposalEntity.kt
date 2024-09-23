@@ -38,6 +38,9 @@ data class ProposalEntity(
     @Column(name= "expiredAt", nullable = false)
     val expiredAt: LocalDateTime,
 
+    @Column(name= "place", nullable = false)
+    val place: String,
+
     @Column(name= "description", nullable = false)
     val description: String,
 

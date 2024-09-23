@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import org.example.freetime.dto.UpdateGroupRequest
+import org.example.freetime.dto.request.UpdateGroupRequest
 
 @Entity
 @Table(name = "groups")

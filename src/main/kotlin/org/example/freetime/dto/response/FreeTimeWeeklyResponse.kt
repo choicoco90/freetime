@@ -1,8 +1,6 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.example.freetime.domain.FreeTimeWeeklyUpdateCommand
-import org.example.freetime.domain.FreeTimes
 import org.example.freetime.entities.WeeklyFreeTimeEntity
 
 @Schema(description = "주간 빈 시간 응답")
@@ -23,7 +21,7 @@ data class FreeTimeWeeklyResponse(
     val sunday: List<FreeTimeResponse>
 ){
     companion object{
-        fun of(entity: WeeklyFreeTimeEntity): FreeTimeWeeklyResponse{
+        fun of(entity: WeeklyFreeTimeEntity): FreeTimeWeeklyResponse {
             return FreeTimeWeeklyResponse(
                 entity.monday.map { FreeTimeResponse.of(it) },
                 entity.tuesday.map { FreeTimeResponse.of(it) },

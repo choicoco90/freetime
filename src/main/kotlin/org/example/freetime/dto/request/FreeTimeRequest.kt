@@ -1,10 +1,7 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.example.freetime.domain.FreeTime
-import org.example.freetime.domain.Schedule
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Schema(description = "빈 시간 생성/수정 요청")
 data class FreeTimeRequest(

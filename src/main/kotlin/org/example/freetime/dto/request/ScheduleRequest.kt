@@ -1,4 +1,4 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.request
 
 import org.example.freetime.domain.Schedule
 import java.time.LocalDateTime

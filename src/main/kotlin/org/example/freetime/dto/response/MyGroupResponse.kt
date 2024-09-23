@@ -1,4 +1,4 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.response
 
 import org.example.freetime.entities.GroupEntity
 import org.example.freetime.entities.UserEntity

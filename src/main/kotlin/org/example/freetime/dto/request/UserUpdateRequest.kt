@@ -1,9 +1,7 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.example.freetime.enums.NoticeChannel
-import org.example.freetime.exception.BizException
-import org.example.freetime.exception.ErrorCode
 
 @Schema(description = "사용자 수정 요청 (이메일 수정 불가")
 data class UserUpdateRequest(

@@ -2,11 +2,11 @@ package org.example.freetime.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.example.freetime.dto.FreeTimeGuestResponse
-import org.example.freetime.dto.FreeTimeMyResponse
-import org.example.freetime.dto.FreeTimeDailyRequest
-import org.example.freetime.dto.FreeTimeWeeklyRequest
-import org.example.freetime.dto.FreeTimeWeeklyResponse
+import org.example.freetime.dto.response.FreeTimeGuestResponse
+import org.example.freetime.dto.response.FreeTimeMyResponse
+import org.example.freetime.dto.request.FreeTimeDailyRequest
+import org.example.freetime.dto.request.FreeTimeWeeklyRequest
+import org.example.freetime.dto.response.FreeTimeWeeklyResponse
 import org.example.freetime.service.FreeTimeService
 import org.example.freetime.service.UserService
 import org.springframework.web.bind.annotation.GetMapping

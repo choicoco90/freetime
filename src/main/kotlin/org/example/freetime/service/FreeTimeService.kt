@@ -3,8 +3,8 @@ package org.example.freetime.service
 import org.example.freetime.domain.FreeTimeDailyUpdateCommand
 import org.example.freetime.domain.FreeTimeWeeklyUpdateCommand
 import org.example.freetime.domain.Schedules
-import org.example.freetime.dto.MeetingResponse
-import org.example.freetime.dto.WeeklyScheduleInfoResponse
+import org.example.freetime.dto.response.MeetingResponse
+import org.example.freetime.dto.response.WeeklyScheduleInfoResponse
 import org.example.freetime.entities.DailyFreeTimeEntity
 import org.example.freetime.entities.MeetingEntity
 import org.example.freetime.entities.WeeklyFreeTimeEntity

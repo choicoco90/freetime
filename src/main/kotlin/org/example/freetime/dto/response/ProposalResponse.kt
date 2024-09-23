@@ -1,7 +1,6 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.example.freetime.domain.Schedule
 import org.example.freetime.entities.ProposalEntity
 import org.example.freetime.enums.ProposalStatus
 import java.time.LocalDateTime
@@ -20,6 +19,8 @@ data class ProposalResponse(
     val schedules: List<ScheduleResponse>,
     @Schema(description = "만료 시간")
     val expiredAt: LocalDateTime,
+    @Schema(description = "장소")
+    val place: String,
     @Schema(description = "제안 설명")
     val description: String,
     @Schema(description = "제안 상태 (대기중, 수락, 거절)")
@@ -34,6 +35,7 @@ data class ProposalResponse(
                 requesterName = entity.requesterName,
                 schedules = ScheduleResponse.from(entity.schedules),
                 expiredAt = entity.expiredAt,
+                place = entity.place,
                 description = entity.description,
                 status = entity.status
             )

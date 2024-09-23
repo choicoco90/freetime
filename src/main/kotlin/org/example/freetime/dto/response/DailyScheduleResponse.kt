@@ -1,4 +1,4 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.example.freetime.domain.Schedules

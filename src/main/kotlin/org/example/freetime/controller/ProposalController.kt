@@ -1,11 +1,10 @@
 package org.example.freetime.controller
 
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.example.freetime.dto.ProposalAcceptRequest
-import org.example.freetime.dto.ProposalCreateRequest
-import org.example.freetime.dto.ProposalResponse
+import org.example.freetime.dto.request.ProposalAcceptRequest
+import org.example.freetime.dto.request.ProposalCreateRequest
+import org.example.freetime.dto.response.ProposalResponse
 import org.example.freetime.service.MeetingService
 import org.example.freetime.utils.logger
 import org.springframework.web.bind.annotation.GetMapping
@@ -46,7 +45,7 @@ class ProposalController(
     @Operation(summary = "미팅 제안 생성")
     @PostMapping
     fun createProposal(
-        @RequestBody request: List<ProposalCreateRequest>,
+        @RequestBody request: ProposalCreateRequest,
         @RequestAttribute("userId") userId: Long
     ) {
         logger().info("createProposal: $request")
@@ -60,7 +59,7 @@ class ProposalController(
         @PathVariable proposalId: Long,
         @RequestBody request: ProposalAcceptRequest
     ) {
-        meetingService.acceptProposal(userId, proposalId, request.schedule.toDomain(), request.description)
+        meetingService.acceptProposal(userId, proposalId, request)
     }
 
     @Operation(summary = "미팅 제안 거절")

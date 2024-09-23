@@ -3,11 +3,9 @@ package org.example.freetime.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.example.freetime.dto.MeetingResponse
-import org.example.freetime.dto.MeetingUpdateRequest
-import org.example.freetime.enums.MeetingStatus
+import org.example.freetime.dto.response.MeetingResponse
+import org.example.freetime.dto.request.MeetingUpdateRequest
 import org.example.freetime.service.MeetingService
-import org.example.freetime.utils.logger
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping

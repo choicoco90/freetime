@@ -1,4 +1,4 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.example.freetime.entities.MeetingEntity
@@ -19,6 +19,8 @@ data class MeetingResponse(
     val start: LocalDateTime,
     @Schema(description = "미팅 종료 시간")
     val end: LocalDateTime,
+    @Schema(description = "미팅 장소")
+    val place: String,
     @Schema(description = "미팅 설명")
     val description: String,
     @Schema(description = "미팅 상태 (승인, 취소)")
@@ -26,7 +28,17 @@ data class MeetingResponse(
 ){
     companion object{
         fun from(meetings: List<MeetingEntity>): List<MeetingResponse> {
-            return meetings.map { MeetingResponse(it.id,it.userId, it.requesterId, it.requesterName, it.start, it.end, it.description, it.status) }
+            return meetings.map { MeetingResponse(
+                it.id,
+                it.userId,
+                it.requesterId,
+                it.requesterName,
+                it.start,
+                it.end,
+                it.place,
+                it.description,
+                it.status
+            ) }
         }
     }
 }

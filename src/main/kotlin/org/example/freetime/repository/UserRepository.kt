@@ -10,4 +10,7 @@ interface UserRepository: JpaRepository<UserEntity, Long> {
     fun findByEmailAndName(email: String, name: String): UserEntity?
 
     fun findAllByIdIn(userIds: List<Long>): List<UserEntity>
+
+    fun findAllByNameStartsWith(name: String): List<UserEntity>
+    fun findAllByEmailStartsWith(email: String): List<UserEntity>
 }

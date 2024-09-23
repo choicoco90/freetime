@@ -1,8 +1,9 @@
 package org.example.freetime.service
 
 import org.example.freetime.domain.Schedule
-import org.example.freetime.dto.MeetingUpdateRequest
-import org.example.freetime.dto.ProposalCreateRequest
+import org.example.freetime.dto.request.MeetingUpdateRequest
+import org.example.freetime.dto.request.ProposalAcceptRequest
+import org.example.freetime.dto.request.ProposalCreateRequest
 import org.example.freetime.entities.MeetingEntity
 import org.example.freetime.entities.ProposalEntity
 import org.example.freetime.enums.MeetingStatus
@@ -25,21 +26,22 @@ class MeetingService(
     val meetingRepository: MeetingRepository
 ) {
     @Transactional(readOnly = false)
-    fun registerProposal(requesterId: Long, request: List<ProposalCreateRequest>) {
+    fun registerProposal(requesterId: Long, request: ProposalCreateRequest) {
         val requester = userRepository.findById(requesterId).orElseThrow { throw BizException(ErrorCode.USER_NOT_FOUND) }
-        request.map {
-            ProposalEntity(
-                userId = it.targetId,
-                requesterId = requester.id,
-                requesterName = requester.name,
-                schedules = it.schedules.map { s -> s.toDomain() },
-                expiredAt = it.expiredAt,
-                description = it.description
-            )
-        }.also { proposalRepository.saveAll(it) }
+        val proposal = ProposalEntity(
+            userId = request.targetId,
+            requesterId = requester.id,
+            requesterName = requester.name,
+            schedules = request.schedules.map { s -> s.toDomain() },
+            expiredAt = request.expiredAt,
+            place = request.place,
+            description = request.description
+        )
+        proposalRepository.save(proposal)
     }
     @Transactional(readOnly = false)
-    fun acceptProposal(userId: Long, proposalId: Long, schedule: Schedule, description: String) {
+    fun acceptProposal(userId: Long, proposalId: Long, request: ProposalAcceptRequest) {
+        val schedule = request.schedule.toDomain()
         val proposal = proposalRepository.findById(proposalId).orElseThrow { throw BizException(ErrorCode.PROPOSAL_NOT_FOUND) }
         if (proposal.userId != userId) throw BizException(ErrorCode.PROPOSAL_IS_NOT_MINE)
         if (proposal.status != ProposalStatus.WAITING) throw BizException(ErrorCode.PROPOSAL_NOT_WAITING)
@@ -51,7 +53,8 @@ class MeetingService(
             requesterName = proposal.requesterName,
             start = foundSchedule.start,
             end = foundSchedule.end,
-            description = description
+            description = request.description,
+            place = request.place
         )
         proposal.accept()
         proposalRepository.save(proposal)
@@ -103,9 +106,9 @@ class MeetingService(
     fun updateMeeting(meetingId: Long, request: MeetingUpdateRequest, userId: Long) {
         val meeting = meetingRepository.findById(meetingId).orElseThrow { throw BizException(ErrorCode.MEETING_NOT_FOUND) }
         meeting.validateUpdate(userId)
-        val hasChange = meeting.hasChanged(request.start, request.end, request.description)
+        val hasChange = meeting.hasChanged(request.start, request.end, request.description, request.place)
         if (hasChange){
-            meeting.update(request.start, request.end, request.description)
+            meeting.update(request.start, request.end, request.description, request.place)
             meetingRepository.save(meeting)
         }
     }

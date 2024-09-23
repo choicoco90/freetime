@@ -1,8 +1,7 @@
-package org.example.freetime.dto
+package org.example.freetime.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.example.freetime.entities.UserEntity
-import org.example.freetime.entities.WeeklyFreeTimeEntity
 import org.example.freetime.enums.NoticeChannel
 
 @Schema(description = "사용자 정보 응답")

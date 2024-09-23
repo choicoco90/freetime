@@ -7,10 +7,10 @@ import com.auth0.jwt.exceptions.SignatureVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import org.example.freetime.domain.Token
 import org.example.freetime.enums.TokenType
-import org.example.freetime.dto.UserCreateRequest
-import org.example.freetime.dto.UserResetPasswordRequest
-import org.example.freetime.dto.UserResetPasswordResponse
-import org.example.freetime.dto.UserUpdateRequest
+import org.example.freetime.dto.request.UserCreateRequest
+import org.example.freetime.dto.request.UserResetPasswordRequest
+import org.example.freetime.dto.response.UserResetPasswordResponse
+import org.example.freetime.dto.request.UserUpdateRequest
 import org.example.freetime.entities.UserEntity
 import org.example.freetime.entities.WeeklyFreeTimeEntity
 import org.example.freetime.exception.AuthException
@@ -36,6 +36,13 @@ class UserService(
 ) {
     private final var algorithm: Algorithm = Algorithm.HMAC256(secretKey.toByteArray())
     var jwtVerifier: com.auth0.jwt.JWTVerifier = JWT.require(algorithm).build()
+
+    @Transactional(readOnly = true)
+    fun searchUsers(value: String): List<UserEntity> {
+        val nameMatchingUsers = userRepository.findAllByNameStartsWith(value)
+        val emailMatchingUsers = userRepository.findAllByEmailStartsWith(value)
+        return (nameMatchingUsers + emailMatchingUsers).distinct()
+    }
 
     @Transactional(readOnly = true)
     fun getAllUsers(): List<UserEntity>{

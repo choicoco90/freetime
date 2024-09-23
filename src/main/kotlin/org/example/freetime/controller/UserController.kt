@@ -3,18 +3,17 @@ package org.example.freetime.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.example.freetime.dto.TokenResponse
-import org.example.freetime.dto.UserCreateRequest
-import org.example.freetime.dto.UserLoginRequest
-import org.example.freetime.dto.UserResetPasswordRequest
-import org.example.freetime.dto.UserResetPasswordResponse
-import org.example.freetime.dto.UserResponse
-import org.example.freetime.dto.UserUpdateRequest
+import org.example.freetime.dto.response.TokenResponse
+import org.example.freetime.dto.request.UserCreateRequest
+import org.example.freetime.dto.request.UserLoginRequest
+import org.example.freetime.dto.request.UserResetPasswordRequest
+import org.example.freetime.dto.response.UserResetPasswordResponse
+import org.example.freetime.dto.response.UserResponse
+import org.example.freetime.dto.request.UserUpdateRequest
 import org.example.freetime.service.UserService
 import org.example.freetime.utils.logger
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestAttribute
@@ -103,5 +102,13 @@ class UserController(
         @RequestAttribute userId: Long
     ) {
         userService.deleteUserById(userId)
+    }
+
+    @Operation(summary = "사용자 검색 (이름, 이메일 시작값 일치)")
+    @GetMapping("/search")
+    fun search(
+        @RequestParam value: String
+    ): List<UserResponse> {
+        return userService.searchUsers(value).map { UserResponse.from(it) }
     }
 }

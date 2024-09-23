@@ -1,10 +1,9 @@
 package org.example.freetime.service
 
-import org.example.freetime.dto.CreateGroupRequest
-import org.example.freetime.dto.GroupResponse
-import org.example.freetime.dto.MyGroupResponse
-import org.example.freetime.dto.UpdateGroupRequest
-import org.example.freetime.dto.UserResponse
+import org.example.freetime.dto.request.CreateGroupRequest
+import org.example.freetime.dto.response.GroupResponse
+import org.example.freetime.dto.response.MyGroupResponse
+import org.example.freetime.dto.request.UpdateGroupRequest
 import org.example.freetime.entities.GroupEntity
 import org.example.freetime.entities.GroupUserEntity
 import org.example.freetime.exception.BizException
@@ -87,8 +86,8 @@ class GroupService(
 
 
     @Transactional(readOnly = false)
-    fun updateGroup(request: UpdateGroupRequest, requesterId: Long) {
-        val groupEntity = getGroup(request.groupId)
+    fun updateGroup(request: UpdateGroupRequest, groupId: Long, requesterId: Long) {
+        val groupEntity = getGroup(groupId)
         validateGroupLeader(groupEntity, requesterId)
         groupEntity.update(request)
         groupRepository.save(groupEntity)
