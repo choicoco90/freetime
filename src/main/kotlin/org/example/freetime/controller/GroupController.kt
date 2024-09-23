@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/groups")
-@Tag(name = "Group", description = "그룹 API")
+@Tag(name = "그룹 관리 API", description = "그룹 API")
 class GroupController(
     val groupService: GroupService
 ) {

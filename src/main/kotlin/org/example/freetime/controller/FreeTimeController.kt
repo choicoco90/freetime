@@ -76,7 +76,7 @@ class FreeTimeController(
         @RequestParam end: LocalDate
     ): FreeTimeGuestResponse {
         val target = userService.getUserById(targetId)
-        val schedules = freeTimeService.getSchedules(targetId, start, end)
+        val schedules = freeTimeService.getSchedules(targetId, start, end.plusDays(1))
         return FreeTimeGuestResponse.from(target, schedules)
     }
 
