@@ -8,7 +8,7 @@ class FilterFactory(
     val noAuthFilter: NoAuthFilter
 ) {
     fun findFilter(path: String): PathFilter {
-        if(AUTH_PASS_PATH.any { path.startsWith(it) } || path == "/"){
+        if(AUTH_PASS_PATH.any { path.startsWith(it) }){
             return noAuthFilter
         }
         return authFilter
