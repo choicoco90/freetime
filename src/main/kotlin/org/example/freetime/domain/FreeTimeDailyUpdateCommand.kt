@@ -1,6 +1,7 @@
 package org.example.freetime.domain
 
 import org.example.freetime.entities.DailyFreeTimeEntity
+import org.example.freetime.model.FreeTimes
 import java.time.LocalDate
 
 data class FreeTimeDailyUpdateCommand(

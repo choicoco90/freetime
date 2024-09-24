@@ -1,4 +1,4 @@
-package org.example.freetime.domain
+package org.example.freetime.model
 
 
 data class FreeTimes(

@@ -26,6 +26,30 @@ class FreeTimeController(
     val freeTimeService: FreeTimeService,
     val userService: UserService
 ) {
+    @Operation(summary = "나의 빈 시간 조회 (메인 API)")
+    @GetMapping
+    fun getMyFreeTime(
+        @RequestAttribute userId: Long,
+        @RequestParam start: LocalDate,
+        @RequestParam end: LocalDate
+    ): FreeTimeMyResponse {
+        val user = userService.getUserById(userId)
+        val weeklySchedule = freeTimeService.getSchedules(userId, start, end.plusDays(1))
+        return FreeTimeMyResponse.from(user, weeklySchedule)
+    }
+
+    @GetMapping("/{targetId}")
+    @Operation(summary = "게스트 빈 시간 조회 (ReadOnly, 미팅 정보 미포함)")
+    fun getFreeTimeReadOnly(
+        @PathVariable targetId: Long,
+        @RequestParam start: LocalDate,
+        @RequestParam end: LocalDate
+    ): FreeTimeGuestResponse {
+        val target = userService.getUserById(targetId)
+        val schedules = freeTimeService.getSchedules(targetId, start, end.plusDays(1))
+        return FreeTimeGuestResponse.from(target, schedules)
+    }
+
 
     @Operation(summary = "나의 설정된 주간 빈시간 조회")
     @GetMapping("/weekly")
@@ -56,28 +80,17 @@ class FreeTimeController(
         freeTimeService.updateDailyFreeTimes(userId, command)
     }
 
-    @Operation(summary = "나의 빈 시간 조회 (메인 API)")
-    @GetMapping
-    fun getMyFreeTime(
-        @RequestAttribute userId: Long,
-        @RequestParam start: LocalDate,
-        @RequestParam end: LocalDate
-    ): FreeTimeMyResponse {
-        val user = userService.getUserById(userId)
-        val weeklyScheduleInfo = freeTimeService.getSchedules(userId, start, end.plusDays(1))
-        return FreeTimeMyResponse.from(user, weeklyScheduleInfo)
-    }
 
-    @GetMapping("/{targetId}")
-    @Operation(summary = "게스트 빈 시간 조회 (ReadOnly, 미팅 정보 미포함)")
-    fun getFreeTimeReadOnly(
-        @PathVariable targetId: Long,
+    @GetMapping("/groups/{groupId}")
+    @Operation(summary = "그룹 빈 시간 조회")
+    fun getGroupFreeTime(
+        @RequestAttribute userId: Long,
+        @PathVariable groupId: Long,
         @RequestParam start: LocalDate,
         @RequestParam end: LocalDate
-    ): FreeTimeGuestResponse {
-        val target = userService.getUserById(targetId)
-        val schedules = freeTimeService.getSchedules(targetId, start, end.plusDays(1))
-        return FreeTimeGuestResponse.from(target, schedules)
+    ) {
+
+
     }
 
 }

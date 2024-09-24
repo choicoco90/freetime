@@ -1,6 +1,5 @@
 package org.example.freetime.service
 
-import org.example.freetime.domain.Schedule
 import org.example.freetime.dto.request.MeetingUpdateRequest
 import org.example.freetime.dto.request.ProposalAcceptRequest
 import org.example.freetime.dto.request.ProposalCreateRequest
@@ -15,7 +14,6 @@ import org.example.freetime.repository.ProposalRepository
 import org.example.freetime.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 // TODO: 여기에 이메일 보내는 기능을 추가
@@ -81,10 +79,7 @@ class MeetingService(
     }
 
     // ----- Meeting ----- //
-    @Transactional(readOnly = true)
-    fun findAllMeetingsOfPeriod(userId: Long, from: LocalDate, to: LocalDate): List<MeetingEntity> {
-        return meetingRepository.findAllByUserIdAndStartBetween(userId, from.atStartOfDay(), to.atStartOfDay())
-    }
+
     @Transactional(readOnly = false)
     fun acceptMeeting(meetingId: Long, userId: Long) {
         val meeting = meetingRepository.findById(meetingId).orElseThrow { throw BizException(ErrorCode.MEETING_NOT_FOUND) }
@@ -112,4 +107,6 @@ class MeetingService(
             meetingRepository.save(meeting)
         }
     }
+
+
 }

@@ -3,11 +3,14 @@ package org.example.freetime.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.example.freetime.dto.request.GroupMeetingCreateRequest
 import org.example.freetime.dto.response.MeetingResponse
 import org.example.freetime.dto.request.MeetingUpdateRequest
+import org.example.freetime.service.GroupMeetingService
 import org.example.freetime.service.MeetingService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,7 +23,7 @@ import java.time.LocalDate
 @RequestMapping("/meetings")
 @Tag(name = "미팅 관리 API")
 class MeetingController(
-    val meetingService: MeetingService
+    val meetingService: MeetingService,
 ) {
 
     @Operation(summary = "미팅 상태 수정(취소)")
@@ -50,16 +53,7 @@ class MeetingController(
     ) {
         meetingService.updateMeeting(meetingId, request, userId)
     }
-    @Operation(summary = "나의 기간별 미팅 정보 조회")
-    @GetMapping
-    fun searchMeetings(
-        @RequestAttribute("userId") userId: Long,
-        @Schema(description = "조회 기간 시작일(포함)")
-        @RequestParam("from") from: LocalDate,
-        @Schema(description = "조회 기간 종료일(포함)")
-        @RequestParam("to") to: LocalDate
-    ): List<MeetingResponse> {
-        val meetings = meetingService.findAllMeetingsOfPeriod(userId, from, to.plusDays(1))
-        return MeetingResponse.from(meetings)
-    }
+
+
+
 }

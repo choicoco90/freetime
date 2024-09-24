@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTDecodeException
 import com.auth0.jwt.exceptions.SignatureVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
-import org.example.freetime.domain.Token
+import org.example.freetime.model.Token
 import org.example.freetime.enums.TokenType
 import org.example.freetime.dto.request.UserCreateRequest
 import org.example.freetime.dto.request.UserResetPasswordRequest

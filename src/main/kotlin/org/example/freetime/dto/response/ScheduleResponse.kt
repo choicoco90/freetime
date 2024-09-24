@@ -1,7 +1,7 @@
 package org.example.freetime.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.example.freetime.domain.Schedule
+import org.example.freetime.model.Schedule
 import java.time.LocalDateTime
 
 @Schema(description = "스케줄 응답")

@@ -1,7 +1,7 @@
 package org.example.freetime.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.example.freetime.domain.Token
+import org.example.freetime.model.Token
 
 @Schema(description = "토큰 응답")
 data class TokenResponse(

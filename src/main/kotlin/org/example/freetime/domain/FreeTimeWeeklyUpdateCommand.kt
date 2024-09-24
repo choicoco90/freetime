@@ -1,6 +1,7 @@
 package org.example.freetime.domain
 
 import org.example.freetime.entities.WeeklyFreeTimeEntity
+import org.example.freetime.model.FreeTimes
 
 data class FreeTimeWeeklyUpdateCommand(
     val monday: FreeTimes,

@@ -1,6 +1,6 @@
 package org.example.freetime.utils
 
-import org.example.freetime.domain.Schedule
+import org.example.freetime.model.Schedule
 import org.example.freetime.enums.OverlapType
 
 object FreeTimeUtils {

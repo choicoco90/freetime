@@ -1,6 +1,6 @@
 package org.example.freetime.dto.request
 
-import org.example.freetime.domain.Schedule
+import org.example.freetime.model.Schedule
 import java.time.LocalDateTime
 
 data class ScheduleRequest(

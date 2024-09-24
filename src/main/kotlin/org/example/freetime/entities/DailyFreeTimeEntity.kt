@@ -8,7 +8,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.example.freetime.converter.FreeTimeConverter
-import org.example.freetime.domain.FreeTime
+import org.example.freetime.model.FreeTime
 import java.time.LocalDate
 
 @Entity

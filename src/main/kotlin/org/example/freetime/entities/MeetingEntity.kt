@@ -8,7 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import org.example.freetime.domain.Schedule
+import org.example.freetime.model.Schedule
 import org.example.freetime.enums.MeetingStatus
 import org.example.freetime.exception.BizException
 import org.example.freetime.exception.ErrorCode

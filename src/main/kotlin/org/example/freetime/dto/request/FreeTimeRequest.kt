@@ -1,7 +1,7 @@
 package org.example.freetime.dto.request
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.example.freetime.domain.FreeTime
+import org.example.freetime.model.FreeTime
 
 @Schema(description = "빈 시간 생성/수정 요청")
 data class FreeTimeRequest(

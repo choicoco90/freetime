@@ -10,7 +10,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.example.freetime.converter.SchedulesConverter
-import org.example.freetime.domain.Schedule
+import org.example.freetime.model.Schedule
 import org.example.freetime.enums.ProposalStatus
 import java.time.LocalDateTime
 

@@ -4,7 +4,7 @@ package org.example.freetime.converter
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import org.example.freetime.domain.Schedule
+import org.example.freetime.model.Schedule
 import org.example.freetime.utils.convertTo
 import org.example.freetime.utils.createJsonNode
 import org.example.freetime.utils.toJsonString

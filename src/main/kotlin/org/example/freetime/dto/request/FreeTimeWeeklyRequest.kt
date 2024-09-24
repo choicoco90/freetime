@@ -2,7 +2,7 @@ package org.example.freetime.dto.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.example.freetime.domain.FreeTimeWeeklyUpdateCommand
-import org.example.freetime.domain.FreeTimes
+import org.example.freetime.model.FreeTimes
 
 @Schema(description = "주간 빈 시간 업데이트 요청")
 data class FreeTimeWeeklyRequest(
