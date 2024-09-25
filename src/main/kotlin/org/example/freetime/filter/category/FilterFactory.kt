@@ -8,17 +8,22 @@ class FilterFactory(
     val noAuthFilter: NoAuthFilter
 ) {
     fun findFilter(path: String): PathFilter {
-        if(AUTH_PASS_PATH.any { path.startsWith(it) }){
+        if(path.startsWith("/users/auth")){
             return noAuthFilter
         }
-        return authFilter
+        if(AUTH_PATH.any { path.startsWith(it) }){
+            return authFilter
+        }
+        return noAuthFilter
     }
     companion object{
-        val AUTH_PASS_PATH = listOf(
-            "/users/auth",
-            "/hello",
-            "/swagger-ui",
-            "/v3/api-docs"
+        val AUTH_PATH = listOf(
+            "/users",
+            "/groups",
+            "/meetings",
+            "/proposals",
+            "/group-meetings",
+            "/free-time"
         )
     }
 }

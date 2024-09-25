@@ -30,9 +30,6 @@ class AuthorizeFilter(
         try {
             val path = request.servletPath
             logger().info("[${request.method}] $path")
-            if(path == "/") {
-                return
-            }
             val filter = filterFactory.findFilter(path)
             filter.handleRequest(request, response, filterChain)
         } catch (e: AuthException) {
