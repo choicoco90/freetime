@@ -9,6 +9,7 @@ import org.example.freetime.exception.ErrorCode
 import org.example.freetime.repository.GroupMeetingRepository
 import org.example.freetime.repository.GroupRepository
 import org.example.freetime.repository.GroupUserRepository
+import org.example.freetime.utils.logger
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -47,8 +48,8 @@ class GroupMeetingService(
 
     @Transactional(readOnly = true)
     fun getGroupMeetingsOfPeriod(userId: Long, start: LocalDateTime, end: LocalDateTime): List<GroupMeeting> {
-        val userGroups = groupUserRepository.findAllByUserId(userId)
-        val groupIds = userGroups.map { it.groupId }
+        val userGroups = groupUserRepository.findAllByUserId(userId).ifEmpty { return emptyList() }
+        val groupIds = userGroups.map { it.groupId }.distinct()
         val groups = groupRepository.findAllByIdIn(groupIds)
         val meetings = groupMeetingRepository.findAllByGroupIdInAndStartBetween(groupIds, start, end)
         return meetings.map {

@@ -25,7 +25,7 @@ class GroupService(
 ) {
     @Transactional(readOnly = true)
     fun getMyGroups(requesterId: Long): List<MyGroupResponse> {
-        val groupUserEntities = groupUserRepository.findAllByUserId(requesterId)
+        val groupUserEntities = groupUserRepository.findAllByUserId(requesterId).ifEmpty { return emptyList() }
         val groupIds = groupUserEntities.map { it.groupId }
         val groupEntities = groupRepository.findAllByIdIn(groupIds)
         val groupLeaderIds = groupEntities.map { it.groupLeader }

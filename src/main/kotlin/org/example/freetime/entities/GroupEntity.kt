@@ -11,9 +11,9 @@ import org.example.freetime.dto.request.UpdateGroupRequest
 @Entity
 @Table(name = "groups")
 data class GroupEntity(
-    @Column(name = "groupName", nullable = false)
+    @Column(name = "group_name", nullable = false)
     var groupName: String,
-    @Column(name = "groupLeader", nullable = false)
+    @Column(name = "group_leader", nullable = false)
     var groupLeader: Long,
     @Column(name = "description", nullable = false)
     var description: String = ""

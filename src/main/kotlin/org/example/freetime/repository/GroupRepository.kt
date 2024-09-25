@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface GroupRepository: JpaRepository<GroupEntity, Long> {
 
-    fun findAllByIdIn(groupId: List<Long>): List<GroupEntity>
+    fun findAllByIdIn(ids: List<Long>): List<GroupEntity>
 }
